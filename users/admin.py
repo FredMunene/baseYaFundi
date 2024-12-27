@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import User, Customer, Company
 
-
+# register models to the Django Admin interface
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "username", "email")
