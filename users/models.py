@@ -7,10 +7,17 @@ class User(AbstractUser):
     is_company = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=False)
     email = models.CharField(max_length=100, unique=True)
-
+# use models.EmailField instead of charField
 
 class Customer(models.Model):
-    pass
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, primary_key=True)
+    # defines instances of user model as strings for debugging
+
+    birth = models.DateField()  # mandatory birth date field
+    def __str__(self):
+        return self.user.username
+
 
 
 class Company(models.Model):
