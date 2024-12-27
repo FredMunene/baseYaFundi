@@ -19,6 +19,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
+#  Specifies the default primary key type for all models that don't explicitly define a primary key
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '-4c+@3tup)%is6x+4s1(c39ozkx_4u21_c!k5i1)_szqpn+f_c'
 
