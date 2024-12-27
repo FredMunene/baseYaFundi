@@ -22,7 +22,21 @@ class CustomerSignUpForm(UserCreationForm):
 
 
 class CompanySignUpForm(UserCreationForm):
-    pass
+    #  add the field is_company that is not in the UserCreationForm
+    is_company = forms.BooleanField(required=False, initial=True, widget = forms.HiddenInput())
+
+    class Meta:
+        model = User
+        fields = ['email', 'password1', 'password2', 'is_company']
+
+    def save(self, commit = ...):
+        user = super().save(commit=False)
+
+        user.is_company = self.cleaned_data['is_company']
+
+        if commit:
+            user.save()
+        return user
 
 
 class UserLoginForm(forms.Form):
