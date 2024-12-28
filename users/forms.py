@@ -2,6 +2,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, authenticate
 from django.db import transaction
 from django.core.exceptions import ValidationError
+from django.utils.text import slugify
+from django.db import IntegrityError
+import uuid
 
 from .models import User, Company, Customer
 
@@ -25,17 +28,29 @@ class CompanySignUpForm(UserCreationForm):
     #  add the field is_company that is not in the UserCreationForm
     is_company = forms.BooleanField(required=False, initial=True, widget = forms.HiddenInput())
 
+    field = forms.ChoiceField(choices=Company._meta.get_field('field').choices, label="Field of Work")
+
     class Meta:
         model = User
         fields = ['email', 'password1', 'password2', 'is_company']
 
-    def save(self, commit = ...):
+    def save(self, commit = True):
         user = super().save(commit=False)
-
         user.is_company = self.cleaned_data['is_company']
 
+        #  Generate a unique username based on the email
+
+        if not user.username:
+            user.username = slugify(self.cleaned_data['email'].split('@')[0]) + "-" + str(uuid.uuid4())[:8]
+
         if commit:
-            user.save()
+            try:
+                user.save()
+                # Create a related Company instance
+                Company.objects.create(user=user, field=self.cleaned_data['field'])
+
+            except IntegrityError:
+                raise ValidationError("a user with this username already exists")
         return user
 
 
