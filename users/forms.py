@@ -19,15 +19,42 @@ def validate_email(value):
         raise ValidationError(
             value + " is already taken.")
 
-
 class CustomerSignUpForm(UserCreationForm):
-    pass
+    
+    is_customer = forms.BooleanField(required=False, initial=True, widget=forms.HiddenInput())
+    first_name = forms.CharField(max_length=150, required=True, label="First Name")
+    last_name = forms.CharField(max_length=150, required=True, label="Last Name")
+    birth = forms.DateField(required=True, label="Date of Birth")
+        
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'is_customer']
 
+    def save(self, commit=True):
+        # Get the user object from the form
+        user = super().save(commit=False)
+
+        # Set custom fields
+        user.is_customer = self.cleaned_data['is_customer']
+        user.is_company = False  # Explicitly mark as not a company
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+
+        # Generate a unique username based on the first name and UUID
+        if not user.username:
+            user.username = slugify(self.cleaned_data['first_name'])
+
+        # Save the user object and related data (if commit=True)
+        if commit:
+            user.save()
+
+        return user
+
+    
 
 class CompanySignUpForm(UserCreationForm):
     #  add the field is_company that is not in the UserCreationForm
     is_company = forms.BooleanField(required=False, initial=True, widget = forms.HiddenInput())
-
     field = forms.ChoiceField(choices=Company._meta.get_field('field').choices, label="Field of Work")
 
     class Meta:
@@ -37,11 +64,11 @@ class CompanySignUpForm(UserCreationForm):
     def save(self, commit = True):
         user = super().save(commit=False)
         user.is_company = self.cleaned_data['is_company']
-
+        useris_customer = False
         #  Generate a unique username based on the email
 
         if not user.username:
-            user.username = slugify(self.cleaned_data['email'].split('@')[0]) + "-" + str(uuid.uuid4())[:8]
+            user.username = slugify(self.cleaned_data['email'])
 
         if commit:
             try:
@@ -55,9 +82,6 @@ class CompanySignUpForm(UserCreationForm):
 
 
 class UserLoginForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super(UserLoginForm, self).__init__(*args, **kwargs)
-
     email = forms.EmailField(widget=forms.TextInput(
         attrs={'placeholder': 'Enter Email'}))
     password = forms.CharField(
@@ -66,3 +90,4 @@ class UserLoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
         self.fields['email'].widget.attrs['autocomplete'] = 'off'
+
