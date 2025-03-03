@@ -76,6 +76,7 @@ YaFundi is a service marketplace website designed to connect customers with comp
 Enjoy using YaFundi to find and offer services efficiently!
 
 ## Technical Flow
+```
 manage.py >> netfix/settings.py >> netfix/urls.py >> root >> main/urls.py >> 
                                                   >> services >> services/url.py
                                                   >> users >> users/url.py
@@ -86,3 +87,4 @@ manage.py >> netfix/settings.py >> netfix/urls.py >> root >> main/urls.py >>
 
 (Main)Base>Home>NavBar>Signup>> (users)>> Register (register.html)>> Customer
                                                                   >> Company:: CompanySignUp(view.py): register_company.html&CompnySignUpForm(form.py)
+```
