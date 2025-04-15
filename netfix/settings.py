@@ -134,5 +134,6 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
 
 # can add customised backend or third-party authentication i.e social login
 AUTHENTICATION_BACKENDS = [
+    'users.backends.EmailAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
