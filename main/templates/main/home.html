@@ -1,12 +1,62 @@
-{% extends 'main/base.html' %} 
-    {%load static %} <!-- load static tag -->
-    {% block title %}
-        NetFix
-    {% endblock %}
+{% extends 'main/base.html' %}
 
 {% block content %}
-    <div style="margin-top: 50px;">
-        <p class="site_title">NetFix</p>
-        <img class="home_logo" src="{% static 'css/logo.png' %}" alt="logo">
+<div class="hero">
+    <h1>NetFix - Your One-Stop Home Service Solution</h1>
+    <p>Find and request home services from professionals in various fields</p>
+</div>
+
+<section class="service-categories">
+    <h2>Service Categories</h2>
+    <div class="category-list">
+        {% for category_value, category_name in categories %}
+            {% if category_value != 'All in One' %}
+                <a href="{% url 'service_category' category=category_value %}" class="category-card">
+                    <div class="category-icon">
+                        <!-- Icon could be added here -->
+                    </div>
+                    <h3>{{ category_name }}</h3>
+                </a>
+            {% endif %}
+        {% endfor %}
     </div>
+</section>
+
+<section class="recent-services">
+    <h2>Recently Added Services</h2>
+    <div class="service-list">
+        {% if recent_services %}
+            {% for service in recent_services %}
+                <div class="service-card">
+                    <h3>{{ service.name }}</h3>
+                    <p class="service-field">{{ service.field }}</p>
+                    <p class="service-price">${{ service.price_per_hour }}/hour</p>
+                    <p class="service-company">By: {{ service.company.user.username }}</p>
+                    <a href="{% url 'service_detail' service.id %}" class="btn">View Details</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No services available yet.</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="popular-services">
+    <h2>Most Requested Services</h2>
+    <div class="service-list">
+        {% if most_requested %}
+            {% for service in most_requested %}
+                <div class="service-card">
+                    <h3>{{ service.name }}</h3>
+                    <p class="service-field">{{ service.field }}</p>
+                    <p class="service-price">${{ service.price_per_hour }}/hour</p>
+                    <p class="service-company">By: {{ service.company.user.username }}</p>
+                    <a href="{% url 'service_detail' service.id %}" class="btn">View Details</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No services requested yet.</p>
+        {% endif %}
+    </div>
+</section>
 {% endblock %}
