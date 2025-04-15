@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views
 
 # from .forms import UserLoginForm
@@ -8,5 +8,6 @@ urlpatterns = [
     path('', v.register, name='register'),
     path('company/', v.CompanySignUpView.as_view(), name='register_company'),
     path('customer/', v.CustomerSignUpView.as_view(), name='register_customer'),
-    path('login/', v.LoginUserView, name='login_user')
+    path('login/', v.LoginUserView, name='login_user'),
+    path('profile/', v.profile_view, name='profile')
 ]
