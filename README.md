@@ -88,3 +88,32 @@ manage.py >> netfix/settings.py >> netfix/urls.py >> root >> main/urls.py >>
 (Main)Base>Home>NavBar>Signup>> (users)>> Register (register.html)>> Customer
                                                                   >> Company:: CompanySignUp(view.py): register_company.html&CompnySignUpForm(form.py)
 ```
+
+
+# Install virtualenv locally
+```
+pip install --user virtualenv
+```
+# Create a virtual environment
+```
+~/.local/bin/virtualenv venv
+```
+# Activate the virtual environment
+```
+source venv/bin/activate
+```
+# Install django
+```
+pip install django
+```
+# Apply migrations
+```
+python manage.py makemigrations app-name
+python manage.py migrate
+```
+
+# Run the project
+```
+python manage.py runserver
+
+```
