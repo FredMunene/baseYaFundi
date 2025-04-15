@@ -196,10 +196,10 @@ button:hover {
   padding: 0;
   margin-bottom: 20px;
 }
-
+/* 
 pre {
   display: none;
-}
+} */
 
 .service_list_info {
   padding: 0 30px;
@@ -286,9 +286,6 @@ pre {
 
 /* =========================================== Forms ============================================ */
 
-form label {
-  display: none;
-}
 
 form {
   margin: 0 auto;
@@ -296,15 +293,11 @@ form {
   width: 65%;
 }
 
-/* form ul {
-  display: none;
-} */
 
 form input {
   padding: 10px 3px;
   font-size: 20px;
   display: block;
-  border: none;
   border-bottom: 3px solid black;
   background-color: inherit;
   margin-top: 30px;
