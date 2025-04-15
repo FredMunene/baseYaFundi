@@ -60,6 +60,10 @@ class CustomerSignUpForm(UserCreationForm):
         # Save the user object and related data (if commit=True)
         if commit:
             user.save()
+            Customer.objects.create(
+                user=user,
+                birth=self.cleaned_data['birth']
+            )
 
         return user
 
