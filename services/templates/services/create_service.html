@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Create New Service</h2>
+    
+    <form method="POST" class="service-form">
+        {% csrf_token %}  <!-- CSRF Token for security -->
+
+        <div class="form-group">
+            <label for="{{ form.name.id_for_label }}">Service Name</label>
+             <input value="{{ form.name }}">
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">Description</label>
+            <textarea>{{ form.description }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.price_hour.id_for_label }}">Price per Hour</label>
+            <input value="{{ form.price_hour }}">
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.field.id_for_label }}">Field</label>
+            <select class="form-control" id="id_field" name="field">
+                <option value="">Select a field</option> 
+                {% for choice in form.field.field.choices %}
+                    <option value="{{ choice.0 }}" {% if choice.0 == form.field.value %}selected{% endif %}>{{ choice.1 }}</option>
+                {% endfor %}
+            </select>
+            {{ form.field }}
+        </div>
+
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create Service</button>
+            <a href="{% url 'profile' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
