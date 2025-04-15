@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.views.generic import CreateView, TemplateView
-
-
+from django.contrib.auth.decorators import login_required
+from services.models import Service, ServiceRequest
 from .forms import CustomerSignUpForm, CompanySignUpForm, UserLoginForm
 from .models import User, Company, Customer
 
@@ -61,3 +61,31 @@ def LoginUserView(request):
         form = UserLoginForm()
 
     return render(request, 'users/login.html', {'form': form})
+
+
+
+@login_required
+def profile_view(request):
+    user = request.user
+    
+    context = {
+        'user': user
+    }
+    
+    if user.is_customer:
+        customer = Customer.objects.get(user=user)
+        requested_services = ServiceRequest.objects.filter(customer=customer)
+        context.update({
+            'customer': customer,
+            'requested_services': requested_services
+        })
+    
+    if user.is_company:
+        company = Company.objects.get(user=user)
+        services = Service.objects.filter(company=company)
+        context.update({
+            'company': company,
+            'services': services
+        })
+    
+    return render(request, 'users/profile.html', context)
